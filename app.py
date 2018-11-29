@@ -1,6 +1,6 @@
 from flask import Flask
-from flask import render_template , request, redirect
-from database import get_all_cats, get_cat_by_id,create_cat
+from flask import render_template , request, redirect, session
+from database import get_all_cats, get_cat_by_id,create_cat, add_vote
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'YOUR-VERY-SECRET-SHHH'
@@ -14,6 +14,11 @@ def catbook_home():
 def cat_page(id):
 	cats = get_cat_by_id(id)
 	return render_template("cat.html", cat=cats)
+
+@app.route('/vote_cat/<int:id>', methods=['POST'])
+def vote(id):
+	add_vote(id)
+	return redirect("/")
 
 @app.route('/add_cat', methods=["GET","POST"])
 def create_cats():
